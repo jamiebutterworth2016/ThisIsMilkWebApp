@@ -1,7 +1,12 @@
+using ThisIsMilkWebApp.Interfaces;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<ILog, Log>();
+builder.Services.AddScoped<ISprintCreator, SprintCreator>();
 
 var app = builder.Build();
 
