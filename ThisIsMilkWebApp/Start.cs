@@ -25,28 +25,38 @@
 
 public class Story
 {
+    public Story()
+    {
+
+    }
+
     public Story(string description, int points)
     {
         Description = description;
         Points = points;
     }
 
-    public string Description { get; private set; }
-    public int Points { get; private set; }
+    public string Description { get; set; }
+    public int Points { get; set; }
 }
 
 public class Sprint
 {
-    public IEnumerable<Story> Stories { get; private set; }
+    public IEnumerable<Story> Stories { get; set; }
 
-    public IEnumerable<SprintDay> SprintDays { get; private set; }
+    public IEnumerable<SprintDay> SprintDays { get; set; }
+
+    public Sprint()
+    {
+
+    }
 
     public Sprint(IEnumerable<Story> stories, int numberOfDaysInSprint, DateTime sprintStartDate)
     {
         Stories = stories;
 
-        if (numberOfDaysInSprint > 5)
-            throw new Exception("Sprint has 5 days max"); //convert to custom exception
+        if (numberOfDaysInSprint < 1 || numberOfDaysInSprint > 5)
+            throw new ArgumentException("Sprint must be one to five days long"); //convert to custom exception
 
         var sprintDays = new List<SprintDay>();
 
@@ -63,6 +73,11 @@ public class Sprint
 
 public class SprintDay
 {
+    public SprintDay()
+    {
+
+    }
+
     public int SprintDayNumber { get; set; }
     public DateTime SprintDayDate { get; set; }
 }

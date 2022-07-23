@@ -1,8 +1,18 @@
-﻿public class SprintCreator : ISprintCreator
+﻿using ThisIsMilkWebApp.Interfaces;
+
+public class SprintCreator : ISprintCreator
 {
-    public Sprint CreateSprint(IEnumerable<Story> stories, int numberOfDaysInSprint, DateTime sprintStartDate)
+    private readonly ISprintRepository _sprintRepository;
+
+    public SprintCreator(ISprintRepository sprintRepository)
+    {
+        _sprintRepository = sprintRepository;
+    }
+
+    public async Task CreateSprintAsync(IEnumerable<Story> stories, int numberOfDaysInSprint, DateTime sprintStartDate, CancellationToken cancellationToken)
     {
         var sprint = new Sprint(stories, numberOfDaysInSprint, sprintStartDate);
-        return sprint;
+
+        await _sprintRepository.SaveSprintAsync(sprint, cancellationToken);
     }
 }
