@@ -1,4 +1,20 @@
 ﻿function submitSprint() {
+
+    $('#btnCreateSprint').prop('disabled', true);
+    $('#alert-danger').hide();
+    $('#alert-success').hide();
+
+    $('#sprintsView-Loading').show();
+    $('#sprintsView').hide();
+
+    //show loading card and wait 5 secs
+    setTimeout(() => {
+        createSprint();
+    }, 5000);
+}
+
+function createSprint(data) {
+
     var data =
     {
         numberOfDaysInSprint: $('#numberOfDaysInSprint').val(),
@@ -10,12 +26,20 @@
         type: 'POST',
         dataType: 'html',
         data: data,
-        success: function (data) {
+        success: (data) => {
             alert('Successfully received Data ');
-            $("#sprintsView").html(data);
+            $('#btnCreateSprint').prop('disabled', false);
+            $('#sprintsView').html(data);
+            $('#alert-success').html('Successfully created sprint');
+            $('#alert-success').show();
+            $('#sprintsView-Loading').hide();
+            $('#sprintsView').show();
         },
-        error: function (data) {
-            alert('Failed to receive the Data');
+        error: () => {
+            $('#alert-danger').html('Failed to create sprint. Please refresh page');
+            $('#alert-danger').show();
+            $('#sprintsView-Loading').hide();
+            $('#sprintsView').hide();
         }
     })
 }
