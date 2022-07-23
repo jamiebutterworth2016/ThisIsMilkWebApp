@@ -1,0 +1,28 @@
+﻿@model IEnumerable<Sprint>
+
+<div class="container">
+	<div class="row">
+		Number of Sprints: @Model.Count()
+	</div>
+</div>
+
+<div class="container">
+
+	@foreach (var sprint in Model)
+	{
+		<div class="row">
+			@sprint.SprintId
+
+			@foreach (var story in sprint.Stories)
+			{
+				<div class="col-sm">
+					@story.Description
+				</div>
+				<div class="col-sm">
+					@story.Points
+				</div>
+			}
+		</div>
+	}
+
+</div>

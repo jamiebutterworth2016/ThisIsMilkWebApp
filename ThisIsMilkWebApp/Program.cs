@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<ILog, Log>();
-builder.Services.AddScoped<ISprintCreator, SprintCreator>();
+builder.Services.AddScoped<ISprintLogic, SprintLogic>();
 builder.Services.AddScoped<ISprintRepository, SprintRepository>();
 
 var app = builder.Build();

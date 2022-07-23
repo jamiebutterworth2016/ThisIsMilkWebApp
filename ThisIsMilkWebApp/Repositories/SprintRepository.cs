@@ -9,21 +9,32 @@ namespace ThisIsMilkWebApp.Repositories
 
         public async Task<IEnumerable<Sprint>> GetSprintsAsync(CancellationToken cancellationToken)
         {
-            using (var stream = File.OpenRead(DataFilePath))
+            using (var stream = File.Open(DataFilePath, FileMode.OpenOrCreate, FileAccess.Read))
             {
-                var result = await JsonSerializer.DeserializeAsync<IEnumerable<Sprint>>(stream, cancellationToken: cancellationToken);
-                return result;
+                var result = stream.Length == 0 ? new SprintsJsonFile() { Sprints = new List<Sprint>() } : await JsonSerializer.DeserializeAsync<SprintsJsonFile>(stream);
+                return result.Sprints;
             }
         }
 
-        public async Task SaveSprintAsync(Sprint sprint, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Sprint>> SaveSprintAsync(Sprint sprint, CancellationToken cancellationToken)
         {
             using (var stream = File.Open(DataFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite))
             {
-                var sprints = stream.Length == 0 ? new List<Sprint>() : await JsonSerializer.DeserializeAsync<ICollection<Sprint>>(stream);
-                sprints.Add(sprint);
-                await JsonSerializer.SerializeAsync(stream, sprints, cancellationToken: cancellationToken);
+                var sprintsJsonFile = stream.Length == 0 ? new SprintsJsonFile() { Sprints = new List<Sprint>() } : await JsonSerializer.DeserializeAsync<SprintsJsonFile>(stream);
+
+                sprintsJsonFile.Sprints.Add(sprint);
+
+                stream.SetLength(0); //delete existing data so it can be replaced by existing data plus the new story.
+
+                await JsonSerializer.SerializeAsync(stream, sprintsJsonFile, cancellationToken: cancellationToken);
+
+                return sprintsJsonFile.Sprints;
             }
         }
+    }
+
+    public class SprintsJsonFile
+    {
+        public ICollection<Sprint> Sprints { get; set; }
     }
 }

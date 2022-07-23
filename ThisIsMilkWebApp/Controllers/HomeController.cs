@@ -8,18 +8,16 @@ namespace ThisIsMilkWebApp.Controllers
 {
     public class HomeController : Controller
     {
-        //private readonly ILogger<HomeController> _logger;
         private readonly ILog _log;
+        private readonly ISprintLogic _sprintLogic;
 
-        public HomeController(
-            //ILogger<HomeController> logger, 
-            ILog log)
+        public HomeController(ILog log, ISprintLogic sprintLogic)
         {
-            //_logger = logger;
             _log = log;
+            _sprintLogic = sprintLogic;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
             await _log.WriteAsync("Home");
 
@@ -43,7 +41,10 @@ namespace ThisIsMilkWebApp.Controllers
             //store as json
             //read json file and show list on page of existing ones. show items
 
-            return View();
+            var sprints = await _sprintLogic.GetSprintsAsync(cancellationToken);
+            model.Sprints = sprints;
+
+            return View(model);
         }
 
         public IActionResult Privacy()
@@ -74,6 +75,8 @@ namespace ThisIsMilkWebApp.Controllers
 
     public class HomeModel
     {
-        public IEnumerable<SelectListItem> StoryPointListItems { get; set; } 
+        public IEnumerable<SelectListItem> StoryPointListItems { get; set; }
+
+        public IEnumerable<Sprint> Sprints { get; set; }
     }
 }
