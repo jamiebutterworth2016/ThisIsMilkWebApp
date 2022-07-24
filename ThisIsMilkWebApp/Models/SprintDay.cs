@@ -1,7 +1,6 @@
-﻿
-public class SprintDay
+﻿public class SprintDay
 {
-    public SprintDay()
+    public SprintDay() //required for json serialisation
     {
 
     }

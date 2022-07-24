@@ -8,7 +8,16 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<ILog, Log>();
 builder.Services.AddScoped<ISprintLogic, SprintLogic>();
-builder.Services.AddScoped<ISprintRepository, SprintRepository>();
+
+var sprintsDataFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "sprints.json");
+
+if (!File.Exists(sprintsDataFile))
+{
+    var file = File.Create(sprintsDataFile);
+    file.Close();
+}
+
+builder.Services.AddScoped<IRepository<Sprint>>(x => new SprintRepository(sprintsDataFile));
 
 var app = builder.Build();
 

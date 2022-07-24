@@ -2,24 +2,49 @@
 
 <div class="container">
 	<div class="row">
-		Number of Sprints: @Model.Count()
+		<div class="col-sm-4">
+			<b>Total Sprints:</b> @Model.Count()
+		</div>
 	</div>
+</div>
 
+<div class="container mt-4">
+	<div class="row">
+		<div class="col-sm-1 fw-bold">
+			Id
+		</div>
+		<div class="col-sm-3 fw-bold">
+			Description
+		</div>
+		<div class="col-sm-2 fw-bold">
+			Length in Days
+		</div>
+		<div class="col-sm-6 fw-bold">
+			Sprint Days
+		</div>
+	</div>
+</div>
+
+<div class="container mt-1">
 	@foreach (var sprint in Model)
 	{
 		<div class="row">
-			@sprint.SprintId
-
-			@foreach (var story in sprint.Stories)
-			{
-				<div class="col-sm">
-					@story.Description
-				</div>
-				<div class="col-sm">
-					@story.Points
-				</div>
-			}
+			<div class="col-sm-1">
+				@sprint.SprintId
+			</div>
+			<div class="col-sm-3">
+				@sprint.SprintDescription
+			</div>
+			<div class="col-sm-2">
+				@sprint.SprintDays.Count()
+			</div>
+			<div class="col-sm-6">
+				@{
+					var sprintDays = sprint.SprintDays.Select(x => $"{x.SprintDayDate.ToString("dd/MM/yyyy")}");
+					var sprintDaysJoin = string.Join(", ", sprintDays);
+				}
+				@sprintDaysJoin
+			</div>
 		</div>
 	}
-
 </div>

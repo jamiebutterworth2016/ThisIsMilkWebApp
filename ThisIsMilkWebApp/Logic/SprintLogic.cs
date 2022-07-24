@@ -2,23 +2,23 @@
 
 public class SprintLogic : ISprintLogic
 {
-    private readonly ISprintRepository _sprintRepository;
+    private readonly IRepository<Sprint> _sprintRepository;
 
-    public SprintLogic(ISprintRepository sprintRepository)
+    public SprintLogic(IRepository<Sprint> sprintRepository)
     {
         _sprintRepository = sprintRepository;
     }
 
-    public async Task<IEnumerable<Sprint>> CreateSprintAsync(IEnumerable<Story> stories, int numberOfDaysInSprint, DateTime sprintStartDate, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Sprint>> CreateSprintAsync(string sprintDescription, DateTime sprintStartDate, int sprintLengthInDays, CancellationToken cancellationToken)
     {
-        var sprint = new Sprint(stories, numberOfDaysInSprint, sprintStartDate);
-        var sprints = await _sprintRepository.SaveSprintAsync(sprint, cancellationToken);
+        var sprint = new Sprint(sprintDescription, sprintStartDate, sprintLengthInDays);
+        var sprints = await _sprintRepository.SaveAsync(sprint, cancellationToken);
         return sprints;
     }
 
     public async Task<IEnumerable<Sprint>> GetSprintsAsync(CancellationToken cancellationToken)
     {
-        var result = await _sprintRepository.GetSprintsAsync(cancellationToken);
+        var result = await _sprintRepository.GetAsync(cancellationToken);
         return result;
     }
 }

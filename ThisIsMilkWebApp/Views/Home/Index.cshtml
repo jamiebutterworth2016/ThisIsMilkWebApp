@@ -5,69 +5,80 @@
 	ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-	<div class="container">
-		<row class="row">
-			<div class="col-sm float-start">
-				<h2>Create Sprint</h2>
+<div class="container">
+	<row class="row">
+		<div class="col-sm-12">
+			<h2>Create Sprint</h2>
+		</div>
+	</row>
+	<row class="row">
+		<div class="col-sm-12">
+			<div id="alert-success" class="alert alert-success" role="alert" style="display:none">
 			</div>
-		</row>
-		<row class="row">
-			<div class="col-sm">
-				<div id="alert-success" class="alert alert-success" role="alert" style="display:none">
-				</div>
-				<div id="alert-danger" class="alert alert-danger" role="alert" style="display:none">
-				</div>
+			<div id="alert-danger" class="alert alert-danger" role="alert" style="display:none">
 			</div>
-		</row>
-		<row class="row">
-			<div class="col-sm-4">
-				Number of Days in Sprint
-			</div>
-			<div class="col-sm-3">
-				<input id="numberOfDaysInSprint" type="number" />
-			</div>
-		</row>
-		<row class="row">
-			<div class="col-sm">
-				<h3>Create Story</h3>
-			</div>
-		</row>
-		<row class="row">
-			<div class="col-sm-3">
-				Story Description
-			</div>
-			<div class="col-sm-3">
-				<input id="storyDescription" type="text" />
-			</div>
-		</row>
-		<row class="row">
-			<div class="col-sm-3">
-				Story Points
-			</div>
-			<div class="col-sm-3">
-				@Html.DropDownList("StoryPoints", Model.StoryPointListItems, new { id = "storyPoints" } )
-			</div>
-		</row>
-		<row class="row">
-			<div class="col-sm">
-				<input id="btnCreateSprint" type="submit" value="Create Sprint" class="btn btn-primary" onclick="submitSprint()" />
-			</div>
-		</row>
-		<row class="row">
+		</div>
+	</row>
+	<row class="row mt-2">
+		<div class="col-sm-2">
+			Description:
+		</div>
+		<div class="col-sm-4">
+			<input id="sprintDescription" type="text" maxlength="24" />
+		</div>
+	</row>
+	<row class="row">
+		<div class="col-sm-2">
+			Start Date:
+		</div>
+		<div class="col-sm-4">
+			<input id="sprintStartDate" type="text" value="@(DateTime.Now.ToString("dd/MM/yyyy"))" />
+		</div>
+	</row>
+	<row class="row">
+		<div class="col-sm-2">
+			Length In Days:
+		</div>
+		<div class="col-sm-4">
+			<input id="sprintLengthInDays" type="number" min="1" max="5" value="1" />
+		</div>
+	</row>
+	<row class="row mt-3">
+		<div class="col-sm-2">
+		</div>
+		<div class="col-sm-4">
+			<input id="btnCreateSprint" type="submit" value="Create Sprint" class="btn btn-primary" onclick="submitSprint()" />
+		</div>
+	</row>
+	<row class="row mt-3">
+		<div class="col-sm-6">
 			<div id="sprintsView-Loading" class="text-center" style="display:none">
 				<div class="spinner-border" role="status">
 					<span class="visually-hidden">Loading...</span>
 				</div>
 			</div>
-		</row>
-		<row class="row">
-			<div id="sprintsView">
+		</div>
+	</row>
+	<row class="row mt-3">
+		<div id="sprintsView" style="@(Model.Sprints.Any() ? "" : "display:none")">
+			@if (Model.Sprints.Any())
+			{
 				@await Html.PartialAsync("~/Views/Home/Sprints.cshtml", @Model.Sprints)
-			</div>
-		</row>
-	</div>
-
+			}
+		</div>
+	</row>
 </div>
 
-<script src="~/js/sprints.js" type="text/javascript"></script>
+@section scripts {
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("#sprintStartDate").datepicker({
+				dateFormat: "dd/mm/yy",
+				minDate: 0,
+				maxDate: "+1y"
+			});
+		});
+	</script>
+
+	<script src="~/js/sprints.js" type="text/javascript"></script>
+}
