@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Mvc;
 using ThisIsMilkWebApp.Interfaces;
 
 namespace ThisIsMilkWebApp.Controllers
@@ -19,6 +20,13 @@ namespace ThisIsMilkWebApp.Controllers
         {
             try
             {
+                await _log.WriteAsync("Create sprint");
+
+                var sprintDescriptionIsValid = Regex.IsMatch(request.SprintDescription.Replace(" ", ""), "^[a-zA-Z0-9_]{1,24}$");
+
+                if (!sprintDescriptionIsValid)
+                    throw new ArgumentException("Sprint description must be alphanumeric, 24 characters max");
+
                 if (request.SprintLengthInDays < 1 || request.SprintLengthInDays > 5)
                     throw new ArgumentException("Sprint length must be one to five days long");
 
@@ -26,6 +34,7 @@ namespace ThisIsMilkWebApp.Controllers
                     throw new ArgumentException("Sprint start date must be in dd/MM/yyyy format");
 
                 var model = await _sprintLogic.CreateSprintAsync(request.SprintDescription, sprintStartDate, request.SprintLengthInDays, cancellationToken);
+                
                 await _log.WriteAsync("Created sprint");
 
                 return PartialView("~/Views/Home/Sprints.cshtml", model);

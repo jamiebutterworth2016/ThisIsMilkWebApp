@@ -1,4 +1,6 @@
-﻿public class Sprint
+﻿using System.Text.RegularExpressions;
+
+public class Sprint
 {
     public int SprintId { get; set; }
 	public string SprintDescription { get; set; }
@@ -12,8 +14,10 @@
     {
         SprintDescription = sprintDescription;
 
-        if (string.IsNullOrWhiteSpace(sprintDescription))
-            throw new ArgumentException("Sprint description must not be empty");
+        var sprintDescriptionIsValid = Regex.IsMatch(sprintDescription.Replace(" ", ""), "^[a-zA-Z0-9_]{1,24}$");
+
+        if (!sprintDescriptionIsValid)
+            throw new ArgumentException("Sprint description must be alphanumeric, between 1 and 24 characters");
 
         if (sprintLengthInDays < 1 || sprintLengthInDays > 5)
             throw new ArgumentException("Sprint length must be one to five days long");

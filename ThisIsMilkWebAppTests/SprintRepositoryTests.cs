@@ -2,7 +2,7 @@ using ThisIsMilkWebApp.Repositories;
 
 namespace ThisIsMilkWebAppTests
 {
-	public class Tests
+	public class SprintRepositoryTests
     {
         private readonly string DataFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "sprints_test.json");
 

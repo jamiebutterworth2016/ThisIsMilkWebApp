@@ -4,8 +4,11 @@
     var sprintStartDate = $('#sprintStartDate').val().trim();
     var sprintLengthInDays = parseInt($('#sprintLengthInDays').val().trim()) || 0;
 
-    if (sprintDescription === "") {
-        showErrorMessage('Please enter a description');
+    var regexConst = new RegExp('^[a-zA-Z0-9_ ]{1,24}$');
+    var sprintDescriptionIsValid = regexConst.test(sprintDescription);
+
+    if (!sprintDescriptionIsValid) {
+        showErrorMessage('Please enter a description - alphanumeric, 24 characters max');
         return;
     }
 
@@ -27,10 +30,11 @@
     };
 
     $('#btnCreateSprint').prop('disabled', true);
+
+    $('#btnCreateSprintSpinner').show();
     $('#alert-danger').hide();
     $('#alert-success').hide();
 
-    $('#sprintsView-Loading').show();
     $('#sprintsView').hide();
 
     //show loading card and wait
@@ -48,10 +52,11 @@ function createSprint(data) {
         data: data,
         success: (data) => {
             $('#btnCreateSprint').prop('disabled', false);
+            $('#btnCreateSprintSpinner').hide();
+
             $('#sprintsView').html(data);
             $('#alert-success').html('Successfully created sprint');
             $('#alert-success').show();
-            $('#sprintsView-Loading').hide();
             $('#sprintsView').show();
 
             $('#sprintDescription').val('');
@@ -59,9 +64,10 @@ function createSprint(data) {
             $('#sprintLengthInDays').val('1');
         },
         error: () => {
+            $('#btnCreateSprintSpinner').hide();
+
             $('#alert-danger').html('Failed to create sprint. Please refresh page');
             $('#alert-danger').show();
-            $('#sprintsView-Loading').hide();
             $('#sprintsView').hide();
         }
     })

@@ -6,13 +6,28 @@
 }
 
 <div class="container">
+
+	<row class="row">
+		<div class="col-sm-12">
+			<div class="alert alert-info" role="alert">
+				Hello <b>This is Milk!</b><br />
+				<br />
+				You can create sprints by entering details in the form below and clicking Create Sprint.<br />
+				This will then add sprint objects to a json file in the background.<br />
+				On clicking Create Sprint, a section below the form will list the existing sprints and their dates.<br />
+				<br />
+				Jamie
+			</div>
+		</div>
+	</row>
+
 	<row class="row">
 		<div class="col-sm-12">
 			<h2>Create Sprint</h2>
 		</div>
 	</row>
-	<row class="row">
-		<div class="col-sm-12">
+	<row class="row" style="height:60px">
+		<div class="col-sm-5">
 			<div id="alert-success" class="alert alert-success" role="alert" style="display:none">
 			</div>
 			<div id="alert-danger" class="alert alert-danger" role="alert" style="display:none">
@@ -23,7 +38,7 @@
 		<div class="col-sm-2">
 			Description:
 		</div>
-		<div class="col-sm-4">
+		<div class="col-sm-2">
 			<input id="sprintDescription" type="text" maxlength="24" />
 		</div>
 	</row>
@@ -31,7 +46,7 @@
 		<div class="col-sm-2">
 			Start Date:
 		</div>
-		<div class="col-sm-4">
+		<div class="col-sm-2">
 			<input id="sprintStartDate" type="text" value="@(DateTime.Now.ToString("dd/MM/yyyy"))" />
 		</div>
 	</row>
@@ -39,27 +54,19 @@
 		<div class="col-sm-2">
 			Length In Days:
 		</div>
-		<div class="col-sm-4">
+		<div class="col-sm-2">
 			<input id="sprintLengthInDays" type="number" min="1" max="5" value="1" />
 		</div>
 	</row>
 	<row class="row mt-3">
-		<div class="col-sm-2">
-		</div>
-		<div class="col-sm-4">
-			<input id="btnCreateSprint" type="submit" value="Create Sprint" class="btn btn-primary" onclick="submitSprint()" />
-		</div>
-	</row>
-	<row class="row mt-3">
-		<div class="col-sm-6">
-			<div id="sprintsView-Loading" class="text-center" style="display:none">
-				<div class="spinner-border" role="status">
-					<span class="visually-hidden">Loading...</span>
-				</div>
-			</div>
+		<div class="col-sm-4 text-center">
+			<button id="btnCreateSprint" class="btn btn-primary" type="submit" onclick="submitSprint()">
+				<span id="btnCreateSprintSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display:none"></span>
+				Create Sprint
+			</button>
 		</div>
 	</row>
-	<row class="row mt-3">
+	<row class="row mt-5">
 		<div id="sprintsView" style="@(Model.Sprints.Any() ? "" : "display:none")">
 			@if (Model.Sprints.Any())
 			{

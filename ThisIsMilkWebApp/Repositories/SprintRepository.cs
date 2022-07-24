@@ -31,6 +31,9 @@ namespace ThisIsMilkWebApp.Repositories
                 if (sprintsJsonFile.Sprints == null)
                     sprintsJsonFile.Sprints = new List<Sprint>();
 
+                if (sprintsJsonFile.Sprints.Count > 50) //this is to stop malicious users from overconsuming disk space.
+                    throw new Exception("Max number of sprints reached, in file");
+
                 stream.SetLength(0); //delete existing data so it can be replaced by existing data plus the new sprint.
 
                 var newSprintId = sprintsJsonFile.Sprints.Any() ? sprintsJsonFile.Sprints.Max(x => x.SprintId) + 1 : 1;
